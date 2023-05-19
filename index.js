@@ -27,11 +27,18 @@ async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
         await client.connect();
+
+        const toyCollection = client.db("toyVerse").collection('Car');
+
+        app.get('/car', async(req,res)=>{
+            const cursor = await toyCollection.find()
+            const result = await cursor.toArray()
+            res.send(result);
+        })
+
         // Send a ping to confirm a successful connection
-
-        client.db("toyVerse").collection('Car')
-
-        await client.db("toyVerse").command({ ping: 1 });
+        // client.db("toyVerse").collection('Car')
+        await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
         // Ensures that the client will close when you finish/error
@@ -39,7 +46,6 @@ async function run() {
     }
 }
 run().catch(console.dir);
-
 
 
 app.get('/', (req, res) => {
