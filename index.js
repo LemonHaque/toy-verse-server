@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -30,10 +30,32 @@ async function run() {
 
         const toyCollection = client.db("toyVerse").collection('Car');
 
-        app.get('/car', async(req,res)=>{
+        app.get('/car', async (req, res) => {
             const cursor = await toyCollection.find()
             const result = await cursor.toArray()
             res.send(result);
+        })
+
+
+        // app.get('/car/:text', async (req, res) => {
+        //     if (req.params.text == 'Sports Car' || req.params.text == 'Normal Car' || req.params.text == 'SUV') {
+        //         const result = await toyCollection.find({ category: req.params.text }).toArray();
+        //         return res.send(result)
+        //     }
+        //     const result = await toyCollection.find({}).toArray();
+        //     res.send(result)
+        // })
+
+
+        app.get('/car/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const options = {
+                projection: { _id: 0, toyName: 1, picture:1, sellerName:1, email:1, quantity:1 }
+            }
+            const result = await toyCollection.findOne(query, options);
+            res.send(result);
+
         })
 
         // Send a ping to confirm a successful connection
