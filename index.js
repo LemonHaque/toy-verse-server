@@ -26,13 +26,13 @@ const client = new MongoClient(uri, {
 async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
-        await client.connect();
+        // await client.connect();
 
 
         const toyCollection = client.db("toyVerse").collection('Car');
 
 
-       
+
         app.get('/car', async (req, res) => {
             const cursor = await toyCollection.find()
             const result = await cursor.toArray()
@@ -49,8 +49,8 @@ async function run() {
             res.send(result)
         })
 
-        app.get('/toy', async(req,res)=>{
-            const cursor =toyCollection.find();
+        app.get('/toy', async (req, res) => {
+            const cursor = toyCollection.find();
             const result = await cursor.toArray();
             res.send(result);
         })
@@ -62,17 +62,23 @@ async function run() {
             res.send(result)
         })
 
+        app.get('/toy/:email', async (req, res) => {
+            console.log(req.params.email);
+            const result = await toyCollection.find({ sellerEmail: req.params.email }).toArray();
+            res.send(result);
+        })
 
-        // app.get('/car/:id', async (req, res) => {
-        //     const id = req.params.id;
-        //     const query = { _id: new ObjectId(id) }
-        //     const options = {
-        //         projection: { _id: 0, toyName: 1, picture:1, sellerName:1, email:1, quantity:1 }
-        //     }
-        //     const result = await toyCollection.findOne(query, options);
-        //     res.send(result);
 
-        // })
+        app.get('/singleCar/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const options = {
+                projection: { _id: 0, toyName: 1, picture: 1, sellerName: 1, email: 1, quantity: 1, price: 1, email: 1, details: 1 }
+            }
+            const result = await toyCollection.findOne(query, options);
+            res.send(result);
+
+        })
 
         // Send a ping to confirm a successful connection
         // client.db("toyVerse").collection('Car')
