@@ -67,6 +67,16 @@ async function run() {
             const result = await toyCollection.find({ sellerEmail: req.params.email }).toArray();
             res.send(result);
         })
+        // update my toys data
+        app.get('/toy/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const result = await toyCollection.findOne(query);
+            res.send(result);
+
+        })
+
+
 
 
         app.get('/singleCar/:id', async (req, res) => {
@@ -78,6 +88,14 @@ async function run() {
             const result = await toyCollection.findOne(query, options);
             res.send(result);
 
+        })
+        // delete my toys
+
+        app.delete('/toy/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const result = await toyCollection.deleteOne(query);
+            res.send(result);
         })
 
         // Send a ping to confirm a successful connection
