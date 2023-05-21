@@ -1,7 +1,6 @@
 const express = require('express');
 const cors = require('cors');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
-
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -10,7 +9,6 @@ app.use(cors());
 app.use(express.json());
 
 require('dotenv').config('')
-
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ulul2vm.mongodb.net/?retryWrites=true&w=majority`;
 
@@ -27,7 +25,6 @@ async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
         // await client.connect();
-
 
         const toyCollection = client.db("toyVerse").collection('Car');
 
@@ -75,9 +72,6 @@ async function run() {
             res.send(result);
 
         })
-
-
-
 
         app.get('/singleCar/:id', async (req, res) => {
             const id = req.params.id;
